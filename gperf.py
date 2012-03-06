@@ -66,10 +66,10 @@ class Graph(object):
                 except ValueError:
                     print "Error generate graph"
 
-                self.header = split_re.split(line[1:].strip())[2:]
+                self.header = split_re.split(line.strip())
                 self.temp = []
             else:
-                self.temp.append(split_re.split(line.strip())[2:])
+                self.temp.append(split_re.split(line.strip()))
 
         try:
             self.generate()
@@ -79,7 +79,7 @@ class Graph(object):
 
     def gen_title(self):
         if self.header:
-            return '__'.join(self.header[1:]).replace('/', '-per-')
+            return '__'.join(self.header[3:]).replace('/', '-per-')
         return ''
 
 
@@ -102,23 +102,23 @@ class Graph(object):
 
         i = 0
 
-        if self.header[1] in self.sub_categories:
+        if self.header[3] in self.sub_categories:
             k = -1
             categories = defaultdict(list)
             for item in self.temp:
-                categories[item[1]].append(item)
+                categories[item[3]].append(item)
 
             for category in sorted(categories)[:10]:
                 i = 0
                 k += 1
-                for j in range(2, len(self.header)):
+                for j in range(4, len(self.header)):
                     list_date = []
                     list_value = []
 
                     for item in categories[category]:
                         # import pdb; pdb.set_trace()
                         list_date.append(
-                        dt.datetime.strptime(item[0], '%Y-%m-%d %H:%M:%S UTC'))
+                        dt.datetime.strptime(item[2], '%Y-%m-%d %H:%M:%S UTC'))
                         list_value.append(item[j])
 
                     if k == len(line_styles):
@@ -127,19 +127,19 @@ class Graph(object):
 
                     ax.plot_date(mpl.dates.date2num(list_date),
                         list_value, linestyle=line_styles[k],
-                        label='%s %s %s' % (self.header[1], category,
+                        label='%s %s %s' % (self.header[3], category,
                             self.header[j]), c=color_scheme20[i],
                         marker=choice(marker_styles))
                     i += 1
 
         else:
-            for j in range(1, len(self.header)):
+            for j in range(3, len(self.header)):
                 list_date = []
                 list_value = []
 
                 for item in self.temp:
                     list_date.append(
-                        dt.datetime.strptime(item[0], '%Y-%m-%d %H:%M:%S UTC'))
+                        dt.datetime.strptime(item[2], '%Y-%m-%d %H:%M:%S UTC'))
                     list_value.append(item[j])
 
                 ax.plot_date(mpl.dates.date2num(list_date),
