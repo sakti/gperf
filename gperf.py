@@ -5,6 +5,7 @@
 import os
 import sys
 import optparse
+import csv
 import datetime as dt
 from collections import defaultdict
 
@@ -16,9 +17,6 @@ import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 fontP = FontProperties()
 fontP.set_size('small')
-
-mpl.rcParams['figure.figsize'] = [60.0, 15.0]
-mpl.rcParams['savefig.dpi'] = 100
 
 color_scheme10 = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
     '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
@@ -34,9 +32,10 @@ class Graph(object):
 
     sub_categories = ['CPU', 'INTR', 'DEV', 'IFACE']
 
-    def __init__(self, filename, output_dir):
+    def __init__(self, filename, output_dir, is_csv=False):
         self.input_filename = filename
         self.output_dir = output_dir
+        self.is_csv = is_csv
 
         try:
             self.input_file = open(filename)
@@ -46,7 +45,7 @@ class Graph(object):
 
         try:
             os.mkdir(self.output_dir)
-        except IOError as e:
+        except (IOError, OSError) as e:
             print "%s: '%s'" % (e.strerror, e.filename)
             sys.exit(3)
 
@@ -82,6 +81,12 @@ class Graph(object):
         plt.hold(True)
         fig = plt.figure()
         ax = fig.add_subplot(111)
+
+
+        if self.is_csv:
+            f = open(os.path.join(self.output_dir, "%s.csv" % self.gen_title()), 'wt')
+            writer = csv.writer(f)
+            writer.writerows([self.header] + self.temp)
 
         i = 0
 
@@ -132,7 +137,7 @@ class Graph(object):
                 i += 1
 
         ax.grid(True)
-        minute_fmt = mpl.dates.DateFormatter('%M')
+        minute_fmt = mpl.dates.DateFormatter('%H:%M')
         second_fmt = mpl.dates.DateFormatter('%S')
         ax.xaxis.set_major_formatter(minute_fmt)
         ax.xaxis.set_minor_formatter(second_fmt)
@@ -160,20 +165,23 @@ class Graph(object):
         plt.savefig(os.path.join(self.output_dir, "%s.png" % self.gen_title()))
 
 
-def help():
-    print "Usage: %s -i input_file -o output_dir" % __file__
-
 
 if __name__ == '__main__':
     parser = optparse.OptionParser()
     parser.add_option('-i', '--input', action='store', dest='input_file', type='string')
     parser.add_option('-o', '--ouput', action='store', dest='output_dir', type='string')
+    parser.add_option('--csv', action='store_true', dest='is_csv', default=False)
+    parser.add_option('--height', action='store', dest='height', type='float', default=15.0)
+    parser.add_option('--width', action='store', dest='width', type='float', default=60.0)
 
     options, remainder = parser.parse_args(sys.argv)
 
+    mpl.rcParams['figure.figsize'] = [options.width, options.height]
+    mpl.rcParams['savefig.dpi'] = 100
+
     if not options.input_file or not options.output_dir:
-        help()
+        parser.print_help()
         sys.exit(2)
 
-    graph = Graph(options.input_file, options.output_dir)
+    graph = Graph(options.input_file, options.output_dir, options.is_csv)
     graph.process()

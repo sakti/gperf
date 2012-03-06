@@ -18,6 +18,19 @@ Requirements
 How to use
 ==========
 
+::
+
+	Usage: gperf.py [options]
+
+	Options:
+	  -h, --help            show this help message and exit
+	  -i INPUT_FILE, --input=INPUT_FILE
+	  -o OUTPUT_DIR, --ouput=OUTPUT_DIR
+	  --csv                 
+	  --height=HEIGHT       
+	  --width=WIDTH  
+
+
 Recording all system activity.
 ::
     
