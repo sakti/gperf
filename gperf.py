@@ -104,6 +104,10 @@ class Graph(object):
                         dt.datetime.strptime(item[0], '%Y-%m-%d %H:%M:%S UTC'))
                         list_value.append(item[j])    
 
+                    if k == len(line_styles):
+                        k = 0
+                        i += 1
+
                     ax.plot_date(mpl.dates.date2num(list_date), 
                         list_value, linestyle=line_styles[k],
                         label='%s %s %s' % (self.header[1], category, 
