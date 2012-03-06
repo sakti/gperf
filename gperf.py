@@ -6,7 +6,9 @@ import os
 import sys
 import optparse
 import csv
+import re
 import datetime as dt
+from random import choice
 from collections import defaultdict
 
 import matplotlib as mpl
@@ -26,7 +28,10 @@ color_scheme20 = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8
     '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
 
 line_styles = ['-', '--', '-.', ':']
+marker_styles = ['.', ',', 'o', 'v', '^', '<', '>', '1', '2', '3', '4', 's', 'p',
+    '*', 'h', 'H', '+', 'x', 'D', 'd', '|', '_']
 
+split_re = re.compile('[;,]')
 
 class Graph(object):
 
@@ -61,10 +66,10 @@ class Graph(object):
                 except ValueError:
                     print "Error generate graph"
 
-                self.header = line[1:].strip().split(';')[2:]
+                self.header = split_re.split(line[1:].strip())[2:]
                 self.temp = []
             else:
-                self.temp.append(line.strip().split(';')[2:])
+                self.temp.append(split_re.split(line.strip())[2:])
 
         try:
             self.generate()
@@ -124,7 +129,7 @@ class Graph(object):
                         list_value, linestyle=line_styles[k],
                         label='%s %s %s' % (self.header[1], category,
                             self.header[j]), c=color_scheme20[i],
-                        marker='.')
+                        marker=choice(marker_styles))
                     i += 1
 
         else:
@@ -140,7 +145,7 @@ class Graph(object):
                 ax.plot_date(mpl.dates.date2num(list_date),
                         list_value, linestyle='-',
                         label=self.header[j], c=color_scheme20[i],
-                        marker='.')
+                        marker=choice(marker_styles))
                 i += 1
 
         ax.grid(True)
