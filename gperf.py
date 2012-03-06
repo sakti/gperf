@@ -22,7 +22,7 @@ color_scheme10 = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
     '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
 
 color_scheme20 = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a',
-    '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', 
+    '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2',
     '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5']
 
 line_styles = ['-', '--', '-.', ':']
@@ -56,13 +56,20 @@ class Graph(object):
 
         for line in self.input_file:
             if line.startswith('#'):
-                self.generate()
+                try:
+                    self.generate()
+                except ValueError:
+                    print "Error generate graph"
+
                 self.header = line[1:].strip().split(';')[2:]
                 self.temp = []
             else:
                 self.temp.append(line.strip().split(';')[2:])
 
-        self.generate()
+        try:
+            self.generate()
+        except ValueError:
+            print "Error generate graph"
 
 
     def gen_title(self):
@@ -96,7 +103,7 @@ class Graph(object):
             for item in self.temp:
                 categories[item[1]].append(item)
 
-            for category in sorted(categories)[:4]:
+            for category in sorted(categories)[:10]:
                 i = 0
                 k += 1
                 for j in range(2, len(self.header)):
@@ -107,15 +114,15 @@ class Graph(object):
                         # import pdb; pdb.set_trace()
                         list_date.append(
                         dt.datetime.strptime(item[0], '%Y-%m-%d %H:%M:%S UTC'))
-                        list_value.append(item[j])    
+                        list_value.append(item[j])
 
                     if k == len(line_styles):
                         k = 0
                         i += 1
 
-                    ax.plot_date(mpl.dates.date2num(list_date), 
+                    ax.plot_date(mpl.dates.date2num(list_date),
                         list_value, linestyle=line_styles[k],
-                        label='%s %s %s' % (self.header[1], category, 
+                        label='%s %s %s' % (self.header[1], category,
                             self.header[j]), c=color_scheme20[i],
                         marker='.')
                     i += 1
@@ -130,7 +137,7 @@ class Graph(object):
                         dt.datetime.strptime(item[0], '%Y-%m-%d %H:%M:%S UTC'))
                     list_value.append(item[j])
 
-                ax.plot_date(mpl.dates.date2num(list_date), 
+                ax.plot_date(mpl.dates.date2num(list_date),
                         list_value, linestyle='-',
                         label=self.header[j], c=color_scheme20[i],
                         marker='.')
@@ -162,6 +169,7 @@ class Graph(object):
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
                   fancybox=True, shadow=True, ncol=5)
 
+        #plt.show()
         plt.savefig(os.path.join(self.output_dir, "%s.png" % self.gen_title()))
 
 
