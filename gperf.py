@@ -135,6 +135,7 @@ class Graph(object):
                         marker=choice(marker_styles))
 
                     if self.is_stat:
+                        list_value = map(float, list_value)
                         f = open(os.path.join(self.output_dir, "%s.txt" % self.gen_title()), 'a')
                         f.write('%s %s %s max : %s \n' % (self.header[3], category, self.header[j], max(list_value)))
                         f.write('%s %s %s min : %s \n' % (self.header[3], category, self.header[j], min(list_value)))
@@ -159,6 +160,7 @@ class Graph(object):
                         marker=choice(marker_styles))
 
                 if self.is_stat:
+                    list_value = map(float, list_value)
                     f = open(os.path.join(self.output_dir, "%s.txt" % self.gen_title()), 'a')
                     f.write('%s max : %s \n' % (self.header[j], max(list_value)))
                     f.write('%s min : %s \n' % (self.header[j], min(list_value)))

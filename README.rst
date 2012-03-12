@@ -20,7 +20,7 @@ How to use
 
 ::
 
-    Usage: gperf [options]
+    Usage: gperf.py [options]
 
     Options:
       -h, --help            show this help message and exit
