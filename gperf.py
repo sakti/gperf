@@ -37,13 +37,15 @@ class Graph(object):
 
     sub_categories = ['CPU', 'INTR', 'DEV', 'IFACE']
 
-    def __init__(self, filename, output_dir, is_csv=False):
-        self.input_filename = filename
-        self.output_dir = output_dir
-        self.is_csv = is_csv
+    def __init__(self, options):
+        self.input_filename = options.input_file
+        self.output_dir = options.output_dir
+        self.is_csv = options.is_csv
+        self.is_stat = options.is_stat
+        self.is_minor = options.is_minor
 
         try:
-            self.input_file = open(filename)
+            self.input_file = open(self.input_filename)
         except IOError as e:
             print "%s: '%s'" % (e.strerror, e.filename)
             sys.exit(3)
@@ -99,6 +101,7 @@ class Graph(object):
             f = open(os.path.join(self.output_dir, "%s.csv" % self.gen_title()), 'wt')
             writer = csv.writer(f)
             writer.writerows([self.header] + self.temp)
+            f.close()
 
         i = 0
 
@@ -130,6 +133,14 @@ class Graph(object):
                         label='%s %s %s' % (self.header[3], category,
                             self.header[j]), c=color_scheme20[i],
                         marker=choice(marker_styles))
+
+                    if self.is_stat:
+                        f = open(os.path.join(self.output_dir, "%s.txt" % self.gen_title()), 'a')
+                        f.write('%s %s %s max : %s \n' % (self.header[3], category, self.header[j], max(list_value)))
+                        f.write('%s %s %s min : %s \n' % (self.header[3], category, self.header[j], min(list_value)))
+                        f.write('%s %s %s avg : %s \n' % (self.header[3], category, self.header[j], sum(list_value)/float(len(list_value))))
+                        f.close()
+
                     i += 1
 
         else:
@@ -146,19 +157,28 @@ class Graph(object):
                         list_value, linestyle='-',
                         label=self.header[j], c=color_scheme20[i],
                         marker=choice(marker_styles))
+
+                if self.is_stat:
+                    f = open(os.path.join(self.output_dir, "%s.txt" % self.gen_title()), 'a')
+                    f.write('%s max : %s \n' % (self.header[j], max(list_value)))
+                    f.write('%s min : %s \n' % (self.header[j], min(list_value)))
+                    f.write('%s avg : %s \n' % (self.header[j], sum(list_value)/float(len(list_value))))
+                    f.close()
+
                 i += 1
 
         ax.grid(True)
         minute_fmt = mpl.dates.DateFormatter('%H:%M')
-        second_fmt = mpl.dates.DateFormatter('%S')
         ax.xaxis.set_major_formatter(minute_fmt)
-        ax.xaxis.set_minor_formatter(second_fmt)
 
-        second_loc = mpl.dates.SecondLocator(bysecond=range(10, 60, 10))
         minute_loc = mpl.dates.MinuteLocator()
         ax.xaxis.set_major_locator(minute_loc)
-        ax.xaxis.set_minor_locator(second_loc)
 
+        if self.is_minor:
+            second_fmt = mpl.dates.DateFormatter('%S')
+            second_loc = mpl.dates.SecondLocator(bysecond=range(10, 60, 10))
+            ax.xaxis.set_minor_formatter(second_fmt)
+            ax.xaxis.set_minor_locator(second_loc)
 
         fig.autofmt_xdate()
 
@@ -184,6 +204,8 @@ if __name__ == '__main__':
     parser.add_option('-i', '--input', action='store', dest='input_file', type='string')
     parser.add_option('-o', '--ouput', action='store', dest='output_dir', type='string')
     parser.add_option('--csv', action='store_true', dest='is_csv', default=False)
+    parser.add_option('--stat', action='store_true', dest='is_stat', default=False)
+    parser.add_option('--minor', action='store_true', dest='is_minor', default=False)
     parser.add_option('--height', action='store', dest='height', type='float', default=15.0)
     parser.add_option('--width', action='store', dest='width', type='float', default=60.0)
 
@@ -196,5 +218,6 @@ if __name__ == '__main__':
         parser.print_help()
         sys.exit(2)
 
-    graph = Graph(options.input_file, options.output_dir, options.is_csv)
+    graph = Graph(options)
     graph.process()
+
