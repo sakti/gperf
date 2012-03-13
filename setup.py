@@ -8,6 +8,7 @@ install_requires = [
 setup(
     name='gperf',
     version='0.1dev',
+    packages=['gperf',],
     license='BSD',
     author='Sakti Dwi Cahyono',
     author_email='54krpl at gmail dot com',
@@ -23,6 +24,6 @@ setup(
         ],
     entry_points={'console_scripts':['gperf = gperf.gperf:main']},
     description='Graphing from sysstat sar data into time-based graph',
-    long_description=open('README.rst').read(),
+    long_description=open('README').read(),
     url='https://github.com/sakti/gperf',
 )

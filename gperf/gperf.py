@@ -98,7 +98,8 @@ class Graph(object):
 
 
         if self.is_csv:
-            f = open(os.path.join(self.output_dir, "%s.csv" % self.gen_title()), 'wt')
+            f = open(os.path.join(self.output_dir, "%s.csv" % self.gen_title()),
+                    'wt')
             writer = csv.writer(f)
             writer.writerows([self.header] + self.temp)
             f.close()
@@ -136,10 +137,15 @@ class Graph(object):
 
                     if self.is_stat:
                         list_value = map(float, list_value)
-                        f = open(os.path.join(self.output_dir, "%s.txt" % self.gen_title()), 'a')
-                        f.write('%s %s %s max : %s \n' % (self.header[3], category, self.header[j], max(list_value)))
-                        f.write('%s %s %s min : %s \n' % (self.header[3], category, self.header[j], min(list_value)))
-                        f.write('%s %s %s avg : %s \n' % (self.header[3], category, self.header[j], sum(list_value)/float(len(list_value))))
+                        f = open(os.path.join(
+                            self.output_dir, "%s.txt" % self.gen_title()), 'a')
+                        f.write('%s %s %s max : %s \n' % (self.header[3], 
+                            category, self.header[j], max(list_value)))
+                        f.write('%s %s %s min : %s \n' % (self.header[3], 
+                            category, self.header[j], min(list_value)))
+                        f.write('%s %s %s avg : %s \n' % (self.header[3], 
+                            category, self.header[j], 
+                            sum(list_value)/float(len(list_value))))
                         f.close()
 
                     i += 1
@@ -161,10 +167,12 @@ class Graph(object):
 
                 if self.is_stat:
                     list_value = map(float, list_value)
-                    f = open(os.path.join(self.output_dir, "%s.txt" % self.gen_title()), 'a')
+                    f = open(os.path.join(
+                        self.output_dir, "%s.txt" % self.gen_title()), 'a')
                     f.write('%s max : %s \n' % (self.header[j], max(list_value)))
                     f.write('%s min : %s \n' % (self.header[j], min(list_value)))
-                    f.write('%s avg : %s \n' % (self.header[j], sum(list_value)/float(len(list_value))))
+                    f.write('%s avg : %s \n' % (self.header[j], 
+                        sum(list_value)/float(len(list_value))))
                     f.close()
 
                 i += 1
@@ -200,16 +208,22 @@ class Graph(object):
         plt.savefig(os.path.join(self.output_dir, "%s.png" % self.gen_title()))
 
 
-
-if __name__ == '__main__':
+def main():
     parser = optparse.OptionParser()
-    parser.add_option('-i', '--input', action='store', dest='input_file', type='string')
-    parser.add_option('-o', '--ouput', action='store', dest='output_dir', type='string')
-    parser.add_option('--csv', action='store_true', dest='is_csv', default=False)
-    parser.add_option('--stat', action='store_true', dest='is_stat', default=False)
-    parser.add_option('--minor', action='store_true', dest='is_minor', default=False)
-    parser.add_option('--height', action='store', dest='height', type='float', default=15.0)
-    parser.add_option('--width', action='store', dest='width', type='float', default=60.0)
+    parser.add_option('-i', '--input', action='store', dest='input_file', 
+        type='string')
+    parser.add_option('-o', '--ouput', action='store', dest='output_dir', 
+        type='string')
+    parser.add_option('--csv', action='store_true', dest='is_csv',
+        default=False)
+    parser.add_option('--stat', action='store_true', dest='is_stat',
+        default=False)
+    parser.add_option('--minor', action='store_true', dest='is_minor',
+        default=False)
+    parser.add_option('--height', action='store', dest='height', type='float',
+        default=15.0)
+    parser.add_option('--width', action='store', dest='width', type='float',
+        default=60.0)
 
     options, remainder = parser.parse_args(sys.argv)
 
@@ -222,4 +236,8 @@ if __name__ == '__main__':
 
     graph = Graph(options)
     graph.process()
+
+
+if __name__ == '__main__':
+    main()
 
