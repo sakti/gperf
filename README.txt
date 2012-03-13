@@ -11,7 +11,6 @@ using the output of ``sar`` tools.
 Requirements
 ============
 
-- pbs
 - matplotlib
 
 
