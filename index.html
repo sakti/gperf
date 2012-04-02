@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Gperf by sakti</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Gperf</h1>
+        <p>graphing performance</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/sakti/gperf" class="button fork"><strong>Fork On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/sakti/gperf/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/sakti/gperf/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h3>Welcome to Gperf homepage.</h3>
+
+<p>Gperf is Graphing performance or system activity information using the output of <code>sar</code> tools.
+It's Open Source, you can clone the repository:</p>
+
+<pre><code>$ git clone git://github.com/sakti/gperf.git
+$ cd gperf
+</code></pre>
+
+<h3>Requirements</h3>
+
+<ul>
+<li>matplotlib</li>
+</ul><h3>Installation</h3>
+
+<p>You can use <code>pip</code> or <code>easy_install</code> to install gperf.</p>
+
+<pre><code>$ pip install gperf
+</code></pre>
+
+<h3>How to use</h3>
+
+<pre><code>    Usage: gperf.py [options]
+
+    Options:
+      -h, --help            show this help message and exit
+      -i INPUT_FILE, --input=INPUT_FILE
+      -o OUTPUT_DIR, --ouput=OUTPUT_DIR
+      --csv                 
+      --stat                
+      --minor               
+      --height=HEIGHT       
+      --width=WIDTH   
+</code></pre>
+
+<p>Recording all system activity.</p>
+
+<pre><code>    $ sar -A -o [output filename] [interval]
+
+    $ sar -A -o activity_result 1
+</code></pre>
+
+<p>Convert result format into csv.</p>
+
+<pre><code>
+    $ sadf -d -- -A [output filename] &gt; [csv filename]
+
+    $ sadf -d -- -A activity_result &gt; activity_result.csv
+
+</code></pre>
+
+<p>Create graph form <code>-d</code> format form sadf.</p>
+
+<pre><code>    $ python gperf.py -i activity_result.csv -o output_dir
+
+    or
+
+    $ python gperf.py --input activity_result.csv --output output_dir
+</code></pre>
+
+<h3>Bugs &amp; Issues</h3>
+
+<p>You can create / report issue in <a href="https://github.com/sakti/gperf/issues">https://github.com/sakti/gperf/issues</a></p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/sakti">sakti</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
