@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 install_requires = [
     'matplotlib'
@@ -7,8 +7,8 @@ install_requires = [
 
 setup(
     name='gperf',
-    version='0.1dev',
-    packages=['gperf',],
+    version='0.2',
+    packages=find_packages(),
     license='BSD',
     author='Sakti Dwi Cahyono',
     author_email='54krpl at gmail dot com',
@@ -24,6 +24,6 @@ setup(
         ],
     entry_points={'console_scripts':['gperf = gperf.gperf:main']},
     description='Graphing from sysstat sar data into time-based graph',
-    long_description=open('README').read(),
+    long_description=open('README.rst').read(),
     url='https://github.com/sakti/gperf',
 )
