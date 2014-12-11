@@ -43,7 +43,7 @@ class Graph(object):
         self.is_csv = options.is_csv
         self.is_stat = options.is_stat
         self.is_minor = options.is_minor
-
+        self.is_utc = options.is_utc
         try:
             self.input_file = open(self.input_filename)
         except IOError as e:
@@ -121,8 +121,11 @@ class Graph(object):
 
                     for item in categories[category]:
                         # import pdb; pdb.set_trace()
-                        list_date.append(
-                        dt.datetime.strptime(item[2], '%Y-%m-%d %H:%M:%S UTC'))
+                        if self.is_utc:
+                            list_date.append(dt.datetime.fromtimestamp(float(item[2])))
+                        else:
+                            list_date.append(
+                            dt.datetime.strptime(item[2], '%Y-%m-%d %H:%M:%S UTC'))
                         list_value.append(item[j])
 
                     if k == len(line_styles):
@@ -156,8 +159,11 @@ class Graph(object):
                 list_value = []
 
                 for item in self.temp:
-                    list_date.append(
-                        dt.datetime.strptime(item[2], '%Y-%m-%d %H:%M:%S UTC'))
+                    if self.is_utc:
+                        list_date.append(dt.datetime.fromtimestamp(float(item[2])))
+                    else:
+                        list_date.append(
+                            dt.datetime.strptime(item[2], '%Y-%m-%d %H:%M:%S UTC'))
                     list_value.append(item[j])
 
                 ax.plot_date(mpl.dates.date2num(list_date),
@@ -216,6 +222,8 @@ def main():
         type='string')
     parser.add_option('--csv', action='store_true', dest='is_csv',
         default=False)
+    parser.add_option('--utc', action='store_true', dest='is_utc',
+        default=False, help="turn this on if timestamp from sdaf is in utc time")
     parser.add_option('--stat', action='store_true', dest='is_stat',
         default=False)
     parser.add_option('--minor', action='store_true', dest='is_minor',
