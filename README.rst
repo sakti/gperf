@@ -2,6 +2,8 @@
 GPerf
 =====
 
+.. image:: https://drone.io/github.com/sakti/gperf/status.png
+
 Graphing performance or system activity information.
 
 using the output of ``sar`` tools.
