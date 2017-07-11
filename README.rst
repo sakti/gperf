@@ -2,6 +2,10 @@
 GPerf
 =====
 
+.. image:: https://badges.gitter.im/Join%20Chat.svg
+   :alt: Join the chat at https://gitter.im/sakti/gperf
+   :target: https://gitter.im/sakti/gperf?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
 .. image:: https://drone.io/github.com/sakti/gperf/status.png
 
 Graphing performance or system activity information.
